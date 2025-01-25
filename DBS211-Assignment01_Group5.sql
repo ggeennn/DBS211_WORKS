@@ -13,7 +13,10 @@ SELECT
    e.extension "Extension",
    o.city "City",
    COALESCE(TO_CHAR(e.reportsto), 'Unknown') "Manager ID",
-   COALESCE(m.lastname || m.firstname, 'Unknown') "Manager Name"
+   COALESCE(m.lastname, 'Unknown') ||
+   CASE
+    WHEN m.firstname IS NOT NULL THEN ',' || m.firstname
+   END  "Manager Name"
 FROM
    employees e
 INNER JOIN offices o ON e.officecode = o.officecode
@@ -68,13 +71,13 @@ ORDER BY "Manager ID";
 -- Q5 SOLUTION
 SELECT c.customerNumber, 
        c.customerName, 
-       p.productCode, 
-       p.msrp AS "OLD Price",
-       ROUND(p.msrp * 0.9, 2) AS "New Price"
+       REPLACE(p.productCode,'_',' ') productCode,
+       p.msrp "OLD Price",
+       ROUND(p.msrp * 0.9, 2) "New Price"
 FROM products p
-JOIN orderdetails od ON p.productCode = od.productCode
-JOIN orders o ON od.orderNumber = o.orderNumber
-JOIN customers c ON o.customerNumber = c.customerNumber
+INNER JOIN orderdetails od ON p.productCode = od.productCode
+INNER JOIN orders o ON od.orderNumber = o.orderNumber
+INNER JOIN customers c ON o.customerNumber = c.customerNumber
 WHERE p.productVendor = 'Exoto Designs'
   AND od.quantityOrdered > 55
 ORDER BY c.customerNumber;
@@ -83,8 +86,8 @@ ORDER BY c.customerNumber;
 SELECT DISTINCT c.customerNumber, 
                 c.customerName
 FROM customers c
-JOIN orders o1 ON c.customerNumber = o1.customerNumber
-JOIN orders o2 ON c.customerNumber = o2.customerNumber 
+INNER JOIN orders o1 ON c.customerNumber = o1.customerNumber
+INNER JOIN orders o2 ON c.customerNumber = o2.customerNumber 
                 AND o1.orderNumber != o2.orderNumber  
 ORDER BY c.customerNumber; 
 
@@ -92,99 +95,23 @@ ORDER BY c.customerNumber;
 SELECT c.customerNumber, 
        c.customerName
 FROM customers c
-JOIN orders o ON c.customerNumber = o.customerNumber
+INNER JOIN orders o ON c.customerNumber = o.customerNumber
 GROUP BY c.customerNumber, c.customerName 
 HAVING COUNT(o.orderNumber) = 1 
 ORDER BY c.customerNumber, c.customerName;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---unfinished
-
 -- Q7 SOLUTION
-CREATE VIEW emp_vu_off_1 AS
-SELECT employeeNumber AS EMPNO, 
-       firstName || ' ' || lastName AS EMPLOYEE,
-       officeCode AS OFFNO
+CREATE VIEW emp_vu_off_1 AS 
+SELECT employeeNumber "EMPNO", 
+       firstName || ' ' || lastName "EMPLOYEE",
+       officeCode "OFFNO"
 FROM employees
 WHERE officeCode = '1';
 
 -- Q8 SOLUTION
 SELECT 
-    INITCAP(lastName) AS Name,  
-    LENGTH(lastName) AS Length   
+    INITCAP(lastName) "Name",  
+    LENGTH(lastName) "Length"   
 FROM 
     employees
 WHERE 
@@ -194,7 +121,7 @@ WHERE
 ORDER BY 
     lastName;  
  
--- Q9 SOLUTION
+-- Q9 SOLUTION？？？？？
 SELECT 
     c.customerName, 
     p.paymentDate, 
@@ -202,12 +129,11 @@ SELECT
     od.productCode, 
     od.quantityOrdered
 FROM 
-    payments p
+    customers c
 JOIN 
-    orders o ON p.customerNumber = o.customerNumber
-JOIN 
+    payments p ON c.customerNumber = p.customerNumber
+CROSS JOIN 
+    orders o ON c.customerNumber = o.customerNumber
+CROSS JOIN 
     orderdetails od ON o.orderNumber = od.orderNumber
-JOIN 
-    customers c ON p.customerNumber = c.customerNumber
-ORDER BY 
-    c.customerName, p.paymentDate;
+
