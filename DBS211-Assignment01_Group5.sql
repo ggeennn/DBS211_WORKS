@@ -7,71 +7,62 @@
  
 -- Q1 SOLUTION -- 
 SELECT
-   e.employeenumber,
-   e.lastname || ' ' || e.firstname "Employee Name",
-   o.phone,
-   e.extension,
-   o.city,
-   e.reportsto AS managerid,
-   (
-      SELECT
-         lastname || ' ' || firstname 
-      FROM
-         employees 
-      WHERE
-         employeenumber = e.reportsto
-   )
-   AS managername 
+   e.employeenumber "Employee Number",
+   e.lastname || ', ' || e.firstname "Employee Name",
+   o.phone "Phone",
+   e.extension "Extension",
+   o.city "City",
+   COALESCE(TO_CHAR(e.reportsto), 'Unknown') "Manager ID",
+   COALESCE(m.lastname || m.firstname, 'Unknown') "Manager Name"
 FROM
-   employees e,
-   offices o 
+   employees e
+INNER JOIN offices o ON e.officecode = o.officecode
+LEFT JOIN employees m ON e.reportsTo = m.employeeNumber
 WHERE
-   e.officecode = o.officecode 
-   AND e.reportsto IS NULL 
+   e.reportsto IS NULL 
 ORDER BY
    o.city,
    e.employeenumber;
    
 -- Q2 SOLUTION
 SELECT e.employeeNumber, 
-       e.firstName || ' ' || e.lastName AS employeeName, 
-       o.phone, 
-       e.extension, 
-       o.city
-FROM employees e, offices o 
-WHERE e.officeCode = o.officeCode 
-AND o.city IN ('NYC', 'Tokyo', 'Paris') 
+       e.firstName || ' ' || e.lastName "Employee Name", 
+       o.phone "Phone", 
+       e.extension "Extension", 
+       o.city "City"
+FROM employees e
+INNER JOIN offices o ON e.officeCode = o.officeCode 
+WHERE o.city IN ('NYC', 'Tokyo', 'Paris') 
 ORDER BY o.city, e.employeeNumber;
  
 -- Q3 SOLUTION
-SELECT e.employeeNumber AS "Employee Number", 
-       e.lastName || ' ' || e.firstName AS "Employee Name", 
-       o.phone AS "Phone", 
-       e.extension AS "Extension", 
-       o.city AS "City", 
-       e.reportsTo AS "Manager ID", 
-       (SELECT firstName || ' ' || lastName FROM employees WHERE employeeNumber = e.reportsTo) AS "Manager Name"
-FROM employees e, offices o 
-WHERE e.officeCode = o.officeCode 
-AND o.city IN ('NYC', 'Tokyo', 'Paris') 
+SELECT e.employeeNumber "Employee Number", 
+       e.lastName || ', ' || e.firstName "Employee Name", 
+       o.phone "Phone", 
+       e.extension "Extension", 
+       o.city "City", 
+       e.reportsTo "Manager ID", 
+       m.firstName || ' ' || m.lastName "Manager Name"
+FROM employees e
+INNER JOIN offices o ON e.officeCode = o.officeCode 
+LEFT JOIN employees m ON e.reportsTo = m.employeeNumber
+WHERE o.city IN ('NYC', 'Tokyo', 'Paris') 
 ORDER BY o.city, e.employeeNumber;
  
 -- Q4 SOLUTION
-SELECT e.employeeNumber AS "Manager ID", 
-       e.firstName || ' ' || e.lastName AS "Manager Name", 
+SELECT e.employeeNumber "Manager ID", 
+       e.firstName || ' ' || e.lastName "Manager Name", 
        o.country, 
        CASE 
            WHEN e.reportsTo IS NOT NULL THEN 
-               'Reports to ' || 
-               (SELECT m.firstName || ' ' || m.lastName || ' (' || m.jobTitle || ')' 
-                FROM employees m 
-                WHERE m.employeeNumber = e.reportsTo)
+               'Reports to ' || m.firstName || ' ' || m.lastName || '(' || m.jobTitle || ')' 
            ELSE 
                'Does not report to anyone' 
-       END AS "Reports to"
+       END "Reports to"
 FROM employees e
-JOIN offices o ON e.officeCode = o.officeCode
-WHERE (e.reportsTo=1056 OR e.reportsTo IS NULL) OR e.jobTitle ='VP Sales'
+INNER JOIN offices o ON e.officeCode = o.officeCode
+LEFT JOIN employees m ON e.reportsTo = m.employeeNumber
+WHERE m.jobTitle = 'VP Sales' OR e.jobTitle ='VP Sales' OR e.reportsTo IS NULL
 ORDER BY "Manager ID";
  
 -- Q5 SOLUTION
