@@ -1,6 +1,16 @@
 -- *********************** 
 -- Name: Yicheng Wang   
 -- ID: 150868206
+-- Solved problem: 1,2,3,4,5,6,7,8
+-- -- -- --
+-- Name:    
+-- ID: 
+-- Solved problem: 
+-- -- -- --
+-- Name:    
+-- ID: 
+-- Solved problem: 
+-- -- -- --
 -- Date: 2025-01-16
 -- Purpose: Assignment 01 DBS211 
 -- *********************** 
@@ -124,16 +134,21 @@ ORDER BY
 -- Q9 SOLUTION？？？？？
 SELECT 
     c.customerName, 
-    p.paymentDate, 
-    p.amount, 
-    od.productCode, 
+    pay.paymentDate, 
+    pay.amount, 
+    p.productCode, 
     od.quantityOrdered
 FROM 
     customers c
 JOIN 
-    payments p ON c.customerNumber = p.customerNumber
-CROSS JOIN 
     orders o ON c.customerNumber = o.customerNumber
-CROSS JOIN 
+JOIN 
     orderdetails od ON o.orderNumber = od.orderNumber
-
+JOIN 
+    products p ON od.productCode = p.productCode
+CROSS JOIN 
+    payments pay ON c.customerNumber = pay.customerNumber
+ORDER BY 
+    c.customerName,
+    p.productCode,
+    pay.paymentDate;
