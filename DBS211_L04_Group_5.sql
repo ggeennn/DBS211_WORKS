@@ -13,6 +13,9 @@ SET AUTOCOMMIT ON;
 CREATE TABLE employee2 AS 
 SELECT * 
 FROM employees;
+ALTER TABLE employee2 ADD CONSTRAINT pk_employee2 PRIMARY KEY (employeenumber);
+ALTER TABLE employee2 ADD CONSTRAINT EMP2_OFFICE_FK FOREIGN KEY (officecode) REFERENCES offices(officecode);
+ALTER TABLE employee2 ADD CONSTRAINT EMP2_RTEMP_FK FOREIGN KEY (reportsto) REFERENCES employee2(employeenumber);
 
 -- Q2
 ALTER TABLE employee2 
@@ -26,17 +29,6 @@ INSERT INTO employee2 (employeenumber, lastname, firstname, extension, email, of
 SELECT * 
 FROM employees;
 
-ALTER TABLE employee2
-ADD CONSTRAINT pk_employee2
-PRIMARY KEY (employeenumber);
-
-ALTER TABLE employee2
-ADD CONSTRAINT EMP2_OFFICE_FK
-FOREIGN KEY (officecode) REFERENCES offices(officecode);
-
-ALTER TABLE employee2
-ADD CONSTRAINT EMP2_RTEMP_FK
-FOREIGN KEY (reportsto) REFERENCES employee2(employeenumber);
 
 -- Q5
 INSERT INTO employee2 (employeenumber, lastname, firstname, extension, email, officecode, reportsto, jobtitle, username) 
@@ -83,6 +75,7 @@ SET username = LOWER(SUBSTR(firstname, 1, 1)||lastname);
 -- Q14
 DELETE FROM employee2 
 WHERE officecode = 4;
+-- WILL NOT WORK: integrity constraint (DBS211_251NGG32.EMP2_RTEMP_FK) violated - child record found
 
 -- Q15
 DROP TABLE employee2;
