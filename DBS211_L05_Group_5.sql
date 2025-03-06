@@ -52,12 +52,7 @@ FROM vwCustomerOrder
 WHERE customernumber = 124
 ORDER BY ordernumber, orderlinenumber;
 --ORA-00904: "ORDERLINENUMBER": invalid identifier
-
-SELECT v.*, od.orderlinenumber  
-FROM vwCustomerOrder v
-JOIN orderdetails od USING (ordernumber)
-WHERE customernumber = 124
-ORDER BY ordernumber, od.orderlinenumber;
+--This error occurs because the orderlinenumber is not in the view
 
 -- Q6
 SELECT customernumber, contactfirstname, contactlastname, phone, creditlimit
@@ -74,8 +69,7 @@ FROM employees e
 LEFT JOIN employees m ON e.reportsto = m.employeenumber;
 
 -- Q8
-RENAME vwEmployeeManager TO employee_manager;
-CREATE OR REPLACE VIEW employee_manager AS
+CREATE OR REPLACE VIEW vwEmployeeManager AS
 SELECT e.*, 
        m.firstname managerfirstname, 
        m.lastname managerlastname
@@ -84,6 +78,5 @@ LEFT JOIN employees m ON e.reportsto = m.employeenumber
 WHERE m.employeenumber IS NOT NULL;
 
 -- Q9
-RENAME vwCustomerOrder TO customer_order;
-DROP VIEW customer_order;
-DROP VIEW employee_manager;
+DROP VIEW vwEmployeeManager;
+DROP VIEW vwCustomerOrder;

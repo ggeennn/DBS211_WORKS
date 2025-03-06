@@ -1,17 +1,11 @@
 -- *********************** 
--- Name: Yicheng Wang   
+-- Name: Yicheng Wang
 -- ID: 150868206
--- Solved problem: 1,2,3,4,5,6,7,8
--- -- -- --
--- Name:    
--- ID: 
--- Solved problem: 
--- -- -- --
--- Name:    
--- ID: 
--- Solved problem: 
--- -- -- --
--- Date: 2025-01-16
+-- Name: Ivy Nicole Dioso
+-- ID: 190130237
+-- Name: Sanjil Amgain
+-- ID: 166534230
+-- Date: 2025/02/14
 -- Purpose: Assignment 01 DBS211 
 -- *********************** 
  
@@ -131,7 +125,7 @@ WHERE
 ORDER BY 
     lastName;  
  
--- Q9 SOLUTION？？？？？
+-- Q9 SOLUTION
 SELECT 
     c.customerName, 
     pay.paymentDate, 
@@ -146,7 +140,7 @@ JOIN
     orderdetails od ON o.orderNumber = od.orderNumber
 JOIN 
     products p ON od.productCode = p.productCode
-CROSS JOIN 
+JOIN 
     payments pay ON c.customerNumber = pay.customerNumber
 ORDER BY 
     c.customerName,
