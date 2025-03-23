@@ -1,0 +1,9 @@
+辅助我完成project2，附件example.pdf是part1第一题的参考，part1第4题 logical database design指tablename[filed1(PK),field2,....]这种形式。帮我完成这个project的part1/2/3中，你可以直接提供答案的部分
+
+
+====answers=====
+https://grok.com/chat/2c54dd26-d9ef-404e-960f-22397c37d40f
+
+or
+
+https://grok.com/share/bGVnYWN5_6c930459-af62-41cb-b9f6-fd1ec0f6722e
