@@ -127,9 +127,9 @@ SELECT
     b.booking_date,
     br.Flight_num,
     f.dep_airport AS departure_airport_code,
-    br.dep_datetime AS departure_date_time,
+    TO_CHAR(br.dep_datetime, 'DD-MON-YY HH24:MI:SS') AS departure_date_time,
     f.arr_airport AS arrival_airport_code,
-    br.arr_datetime AS arrival_date_time
+    TO_CHAR(br.arr_datetime, 'DD-MON-YY HH24:MI:SS') AS arrival_date_time
 FROM BookingRecord br
 JOIN Booking b ON br.BookingID = b.BookingID
 JOIN Flight f ON br.Flight_num = f.Flight_num
