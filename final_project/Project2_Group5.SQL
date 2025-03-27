@@ -104,48 +104,48 @@ SELECT * FROM dual;
 
 --P3 Q1
 SELECT
-    f.Flight_num,
-    f.Airline_code,
-    a.Airline_Name,
-    f.Aircraft_code,
-    ac.Aircraft_desc,
-    f.dep_airport AS departure_airport_code,
+    Flight_num,
+    Airline_code,
+    Airline_Name,
+    Aircraft_code,
+    Aircraft_desc,
+    dep_airport AS departure_airport_code,
     ap1.Airport_name AS departure_airport_name,
-    f.arr_airport AS arrival_airport_code,
+    arr_airport AS arrival_airport_code,
     ap2.Airport_name AS arrival_airport_name
-FROM Flight f
-JOIN Airline a ON f.Airline_code = a.Airline_code
-JOIN Aircraft ac ON f.Aircraft_code = ac.Aircraft_code
-JOIN Airport ap1 ON f.dep_airport = ap1.Airport_code
-JOIN Airport ap2 ON f.arr_airport = ap2.Airport_code
-WHERE f.Flight_num = 'AF393';
+FROM Flight 
+JOIN Airline  USING(Airline_code)
+JOIN Aircraft USING(Aircraft_code)
+JOIN Airport ap1 ON dep_airport = ap1.Airport_code
+JOIN Airport ap2 ON arr_airport = ap2.Airport_code
+WHERE Flight_num = 'AF393';
 -- 1 row affected
 
 --P3 Q2
 SELECT
-    br.BookingID,
-    b.booking_date,
-    br.Flight_num,
-    f.dep_airport AS departure_airport_code,
-    TO_CHAR(br.dep_datetime, 'DD-MON-YY HH24:MI:SS') AS departure_date_time,
-    f.arr_airport AS arrival_airport_code,
-    TO_CHAR(br.arr_datetime, 'DD-MON-YY HH24:MI:SS') AS arrival_date_time
-FROM BookingRecord br
-JOIN Booking b ON br.BookingID = b.BookingID
-JOIN Flight f ON br.Flight_num = f.Flight_num
-WHERE br.BookingID = 56753365
-ORDER BY br.dep_datetime;
+    BookingID,
+    booking_date,
+    Flight_num,
+    dep_airport AS departure_airport_code,
+    TO_CHAR(dep_datetime, 'DD-MON-YY HH24:MI:SS') AS departure_date_time,
+    arr_airport AS arrival_airport_code,
+    TO_CHAR(arr_datetime, 'DD-MON-YY HH24:MI:SS') AS arrival_date_time
+FROM BookingRecord
+JOIN Booking USING(BookingID)
+JOIN Flight USING(Flight_num)
+WHERE BookingID = 56753365
+ORDER BY dep_datetime;
 -- 1 row affected
 
 --P3 Q3
 SELECT
-    t.BookingID,
-    t.eticket_num,
-    tr.first_name AS traveler_first_name,
-    tr.last_name AS traveler_last_name
-FROM TICKET t
-JOIN Traveler tr ON t.traveler_id = tr.traveler_id
-WHERE t.BookingID = 56753365;
+    BookingID,
+    eticket_num,
+    first_name AS traveler_first_name,
+    last_name AS traveler_last_name
+FROM TICKET
+JOIN Traveler USING(traveler_id)
+WHERE BookingID = 56753365;
 -- 3 row affected
 
 --P3 Q4
