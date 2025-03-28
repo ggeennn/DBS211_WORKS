@@ -158,9 +158,9 @@ WHERE BookingID = 56753365;
 --P3 Q5
 CREATE VIEW Book_ticket AS
 SELECT
-    b.BookingID,
-    COUNT(t.eticket_num) AS number_of_tickets
-FROM Booking b
-LEFT JOIN TICKET t ON b.BookingID = t.BookingID
-GROUP BY b.BookingID;
+    BookingID,
+    COUNT(eticket_num) AS number_of_tickets
+FROM Booking
+LEFT JOIN TICKET USING(BookingID)
+GROUP BY BookingID;
 -- 2 row affected
